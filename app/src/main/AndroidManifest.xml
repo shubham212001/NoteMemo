@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteMemo">
-        <activity android:name=".task_activity"></activity>
+        <activity android:name=".update_activiity"></activity>
+        <activity android:name=".task_activity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

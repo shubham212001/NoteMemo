@@ -1,10 +1,7 @@
 package com.sharma.notememo
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface task_dao {
@@ -22,4 +19,7 @@ interface task_dao {
     //Query for deletion of an item from the list
     @Delete
     suspend fun delete_task(input: entity)
+
+    @Update
+    suspend fun update_task(input: entity)
 }

@@ -28,6 +28,10 @@ class task_adapter(val list: List<entity>,val Listener:listener) : RecyclerView.
         holder.itemView.share.setOnClickListener {
             Listener.share(list[position])
         }
+//        holder.itemView.edit.setOnClickListener {
+//            Listener.update_task(list[position])
+//        }
+
     }
 
 
@@ -36,7 +40,7 @@ class task_adapter(val list: List<entity>,val Listener:listener) : RecyclerView.
         fun bind(todoModel: entity) {
             with(itemView) {
                 user_title.text = todoModel.title.toUpperCase()
-                user_descr.text = todoModel.description
+                user_descr.text = todoModel.description.toString().toUpperCase()
                 user_date.text = todoModel.date
                 user_time.text = todoModel.time
 
@@ -64,4 +68,6 @@ class task_adapter(val list: List<entity>,val Listener:listener) : RecyclerView.
 interface listener {
     fun delete_task(input:entity)
     fun share(input:entity)
+    fun update_task(input: entity)
+
 }

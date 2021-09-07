@@ -14,9 +14,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class MainActivity : AppCompatActivity(),listener {
+open class MainActivity : AppCompatActivity(),listener {
 
-    //Lazy block also checks for nullability
+
     val db by lazy {
         task_database.getDatabase(this)
     }
@@ -117,7 +117,34 @@ class MainActivity : AppCompatActivity(),listener {
           shareIntent.action = Intent.ACTION_SEND
           shareIntent.type="text/plain"
           shareIntent.putExtra(Intent.EXTRA_TEXT, final_shareable_data);
-          startActivity(Intent.createChooser(shareIntent,"send to"))
+          startActivity(Intent.createChooser(shareIntent,"Share Title and Description"))
       }
     }
+
+    override fun update_task(input: entity) {
+        GlobalScope.launch (Dispatchers.Main){
+            var title=input.title
+            var description=input.description
+            var date=input.date
+            var time=input.time
+            val intent=Intent(this@MainActivity,update_activiity::class.java)
+            intent.putExtra("edit_title",title)
+            intent.putExtra("edit_description",description)
+            intent.putExtra("edit_date",date)
+            intent.putExtra("edit_time",time)
+            startActivity(intent)
+        }
+    }
+
+    fun updater(){
+        db.todoDao().get_all().observe(this@MainActivity, Observer {
+
+            list.clear()
+            list.addAll(it)
+            adapter.notifyDataSetChanged()
+
+
+        })
+    }
 }
+

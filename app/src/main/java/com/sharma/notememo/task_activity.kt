@@ -29,11 +29,11 @@ class task_activity : AppCompatActivity() {
         this.getSupportActionBar()?.hide()
 
 
-        save.setOnClickListener {
-            val title = title_input.text.toString()
-            val description = desc_input.text.toString()
-            val date = date_input.text.toString()
-            val time = time_input.text.toString()
+        update_button.setOnClickListener {
+            val title = edit_title.text.toString()
+            val description = edit_desc.text.toString()
+            val date = edit_date.text.toString()
+            val time = edit_time.text.toString()
             if (title.length != 0 && description.length != 0 && date.length != 0 && time.length != 0) {
 
                 GlobalScope.launch(Dispatchers.Main) {
@@ -75,12 +75,12 @@ class task_activity : AppCompatActivity() {
                         .build()
 
         GlobalScope.launch {
-            date_input.setOnClickListener {
+            edit_date.setOnClickListener {
                 datePicker.show(supportFragmentManager, "tag")
             }
         }
         GlobalScope.launch {
-            time_input.setOnClickListener {
+            edit_time.setOnClickListener {
                 time_picker.show(supportFragmentManager, "tag");
             }
         }
@@ -121,11 +121,11 @@ class task_activity : AppCompatActivity() {
                     }
                 }
             }
-            time_input.setText(formattedTime)
+            edit_time.setText(formattedTime)
         }
         datePicker.addOnPositiveButtonClickListener {
             val dater = datePicker.headerText.toString()
-            date_input.setText(dater)
+            edit_date.setText(dater)
         }
 //From here we can write the desired code so that the desired thing happens
 
