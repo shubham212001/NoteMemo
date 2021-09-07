@@ -17,6 +17,7 @@ Features :<br>
 
 The app is developed in the android studio by 100 % using the koltin language.<br>
 <b>Room library</b> has been used to store data in the local system .<br>
+<b>Kotlin Coroutines has been used to implement asynchronous task in the backgroud thread </b><br>
 
 Room is a very powerful abstraction tool and being an abstraction layer on the <br>
 native MySQLlite ,Database Management System.<br>
