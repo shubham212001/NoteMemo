@@ -5,7 +5,7 @@
 ## Overview
 This is a task noter mobile application developed by using the official language for
 android development i.e "Kotlin"<br>
-The App can be used as an daily driver for noting down the important dates ,tasks and schedule other events
+The App can be used as an daily driver for noting down the important dates ,tasks and schedule other events.<br>
 Features :<br>
 1.Tasks can be easily added and being displayed in the apps home screen .<br>
 2.Tasks can be deleted and updated .<br>
