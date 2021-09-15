@@ -3,7 +3,7 @@
    ![S1.png](https://github.com/shubham212001/NoteMemo/blob/master/kotlin-into.jpg)
 <br><br>
 ## Overview
-This is a task noter mobile application developed by using the official language for
+This is a Task Noting / ToDo  mobile application developed by using the official language for
 android development i.e "Kotlin"<br>
 The App can be used as an daily driver for noting down the important dates ,tasks and schedule other events.<br>
 Features :<br>
@@ -14,15 +14,22 @@ Features :<br>
 <b>5.The date and time can be selected and entered by using the Material Calendar and Date Picker.</b> <br>
 
 ## TechStack  - (ROOM)
+## The application is performing the required CRUD Operations.<br>
 
-The app is developed in the android studio by 100 % using the koltin language.<br>
+The app is developed in the android studio IDE completely using "Kotlin".<br>
 <b>Room library</b> has been used to store data in the local system .<br>
-<b>Kotlin Coroutines has been used to implement asynchronous task in the backgroud thread </b><br>
+<b>Kotlin Coroutines has been used to implement the database reading ,writing ,deleting related asynchronous task in the backgroud thread. </b><br>
 
-Room is a very powerful abstraction tool and being an abstraction layer on the <br>
-native MySQLlite ,Database Management System.<br>
+<b>Reason to use ROOM persistence library over the native SQLite</b><br><br>
+1.Room is a very powerful abstraction layer over the native SQLlite ,Database Management System.<br>
+2.Using the Room instead of Raw MySQL provides a robust system and decrease the boilerplatecode drastically.<br><br>
+<b>Reason for using Kotlin Coroutines in comparison with the native AsyncTask </b><br><br>
+1.AsyncTask was deprecated in API level 30 in the official android documentation.<br>
+2.<b>Kotlin Coroutines was promoted to be used in comparison to the AsynTask as</b> <br><br>
+I .Kotin reduces the boilerplate code with proving different scopes of operation.<br>
+II. More and more people are engaging in using Kotlin-Coroutines.<br>
+III. Applying AsyncTask in complex code structure or function is difficult in comparison.<br>
 
-Using the Room instead of Raw MySQL provides a robust system and decrease the boilerplatecode drastically.<br>
 
 ## Screenshots<br><br>
 ## Sorting Menu and Overview<br>
