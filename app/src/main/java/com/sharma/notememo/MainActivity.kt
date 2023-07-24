@@ -8,9 +8,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.window.SplashScreen
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.sharma.notememo.auth.SplashActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +25,9 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), listener {
+    val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val tasksRef: CollectionReference = firestore.collection("tasks")
 
     private lateinit var db: FirebaseFirestore
     private val list = arrayListOf<FirestoreTask>()
@@ -65,9 +74,41 @@ class MainActivity : AppCompatActivity(), listener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // handle sorting by updating Firestore query in snapshot listener
+        when (item.itemId) {
+            R.id.sort -> {
+                // Load and sort data from Firestore in ascending order
+                tasksRef.orderBy("title", Query.Direction.ASCENDING)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val sortedTasks = result.toObjects(FirestoreTask::class.java)
+                        list.clear()
+                        list.addAll(sortedTasks)
+                        adapter.notifyDataSetChanged()
+                    }
+            }
+            R.id.sort1 -> {
+                // Load and sort data from Firestore in descending order
+                tasksRef.orderBy("title", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val sortedTasks = result.toObjects(FirestoreTask::class.java)
+                        list.clear()
+                        list.addAll(sortedTasks)
+                        adapter.notifyDataSetChanged()
+                    }
+            }
+            R.id.signout -> {
+                // Sign out the user
+                FirebaseAuth.getInstance().signOut()
+                // Return to Splash Screen
+                startActivity(Intent(this, SplashActivity::class.java))
+                finish()
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
+
+
 
     override fun delete_task(input: FirestoreTask) {
         db.collection("tasks").document(input.id)

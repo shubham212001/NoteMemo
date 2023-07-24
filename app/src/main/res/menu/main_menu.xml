@@ -9,4 +9,10 @@
         android:title="Sort:Latest"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/signout"
+        android:orderInCategory="100"
+        android:title="Sign Out"
+        app:showAsAction="never" />
+
 </menu>
