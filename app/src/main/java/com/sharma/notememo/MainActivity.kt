@@ -1,50 +1,55 @@
 package com.sharma.notememo
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-open class MainActivity : AppCompatActivity(),listener {
 
+class MainActivity : AppCompatActivity(), listener {
 
-    val db by lazy {
-        task_database.getDatabase(this)
-    }
-    val list = arrayListOf<entity>()
-    var adapter = task_adapter(list,this)
+    private lateinit var db: FirebaseFirestore
+    private val list = arrayListOf<FirestoreTask>()
+    private var adapter = task_adapter(list, this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        todorv.apply {
-//            layoutManager = LinearLayoutManager(this@MainActivity)
-//            adapter = this.adapter
-//        }
-        todorv.layoutManager= LinearLayoutManager(this)
-        var Adapter =todorv.adapter
-        todorv.adapter=adapter
 
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance()
 
-        db.todoDao().get_all().observe(this, Observer {
+        todorv.layoutManager = LinearLayoutManager(this)
+        todorv.adapter = adapter
 
+        db.collection("tasks").addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.w(TAG, "Listen failed.", error)
+                return@addSnapshotListener
+            }
+
+            val tasks = ArrayList<FirestoreTask>()
+            for (doc in value!!) {
+                doc.toObject(FirestoreTask::class.java)?.let {
+                    it.id = doc.id
+                    tasks.add(it)
+                }
+            }
             list.clear()
-            list.addAll(it)
+            list.addAll(tasks)
             adapter.notifyDataSetChanged()
-
-
-        })
-        addbutton.setOnClickListener{
-            val intent= Intent(this,task_activity::class.java)
-            startActivity(intent)
         }
 
         addbutton.setOnClickListener {
@@ -58,93 +63,34 @@ open class MainActivity : AppCompatActivity(),listener {
         inflater.inflate(R.menu.main_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.history -> {
-//                startActivity(Intent(this, HistoryActivity::class.java))
-//            }
-//        }
-        when (item.itemId) {
-            R.id.sort -> {
-                GlobalScope.launch (Dispatchers.Main){
-                    db.todoDao().get_all1().observe(this@MainActivity, Observer {
-
-                        list.clear()
-                        list.addAll(it)
-                        adapter.notifyDataSetChanged()
-
-
-                    }) }
-
-            }
-            R.id.sort1 -> {
-                GlobalScope.launch (Dispatchers.Main){
-                    db.todoDao().get_all().observe(this@MainActivity, Observer {
-
-                    list.clear()
-                    list.addAll(it)
-                    adapter.notifyDataSetChanged()
-
-
-                }) }
-
-
-            }
-        }
+        // handle sorting by updating Firestore query in snapshot listener
         return super.onOptionsItemSelected(item)
     }
-    override fun delete_task(input: entity) {
-        GlobalScope.launch (Dispatchers.Main){
-            db.todoDao().delete_task(input)
-            db.todoDao().get_all().observe(this@MainActivity, Observer {
 
-                list.clear()
-                list.addAll(it)
-                adapter.notifyDataSetChanged()
-
-
-            })
-        }
-
+    override fun delete_task(input: FirestoreTask) {
+        db.collection("tasks").document(input.id)
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
-    override fun share(input: entity) {
-      GlobalScope.launch (Dispatchers.Main){
-         var title=input.title
-          var description=input.description
-          var final_shareable_data=title+"\n"+description
-          val shareIntent = Intent()
-          shareIntent.action = Intent.ACTION_SEND
-          shareIntent.type="text/plain"
-          shareIntent.putExtra(Intent.EXTRA_TEXT, final_shareable_data);
-          startActivity(Intent.createChooser(shareIntent,"Share Title and Description"))
-      }
+    override fun share(input: FirestoreTask) {
+        val title = input.title
+        val description = input.description
+        val final_shareable_data = "$title\n$description"
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, final_shareable_data)
+        startActivity(Intent.createChooser(shareIntent, "Share Title and Description"))
     }
 
-    override fun update_task(input: entity) {
-        GlobalScope.launch (Dispatchers.Main){
-            var title=input.title
-            var description=input.description
-            var date=input.date
-            var time=input.time
-            val intent=Intent(this@MainActivity,update_activiity::class.java)
-            intent.putExtra("edit_title",title)
-            intent.putExtra("edit_description",description)
-            intent.putExtra("edit_date",date)
-            intent.putExtra("edit_time",time)
-            startActivity(intent)
-        }
-    }
-
-    fun updater(){
-        db.todoDao().get_all().observe(this@MainActivity, Observer {
-
-            list.clear()
-            list.addAll(it)
-            adapter.notifyDataSetChanged()
-
-
-        })
+    override fun update_task(input: FirestoreTask) {
+        TODO("Not yet implemented")
     }
 }
+
+
 
