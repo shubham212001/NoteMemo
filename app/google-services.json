@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1012981384619",
+    "project_id": "notememo-bb244",
+    "storage_bucket": "notememo-bb244.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012981384619:android:f0fa8d614fd71a2c383eee",
+        "android_client_info": {
+          "package_name": "com.sharma.notememo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012981384619-3efmjd46d2967l39q806lpuvl5pu0s8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sharma.notememo",
+            "certificate_hash": "16e4252e6da8163851e689efa1e3573bb9c53550"
+          }
+        },
+        {
+          "client_id": "1012981384619-slih68vsh5tlmq5btf2k7q6pf9ncsi2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxReQfR9PLaekHjiBVSS4BTxm-Ur_CsX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012981384619-slih68vsh5tlmq5btf2k7q6pf9ncsi2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

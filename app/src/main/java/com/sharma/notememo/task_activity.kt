@@ -1,11 +1,14 @@
 package com.sharma.notememo
 
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_task_activity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,6 +17,9 @@ import kotlinx.coroutines.withContext
 
 const val DB_NAME = "todo.db"
 class task_activity : AppCompatActivity() {
+    val db = FirebaseFirestore.getInstance()
+    val taskCollection = db.collection("tasks")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_activity)
@@ -29,31 +35,58 @@ class task_activity : AppCompatActivity() {
         this.getSupportActionBar()?.hide()
 
 
+//        update_button.setOnClickListener {
+//            val title = edit_title.text.toString()
+//            val description = edit_desc.text.toString()
+//            val date = edit_date.text.toString()
+//            val time = edit_time.text.toString()
+//            if (title.length != 0 && description.length != 0 && date.length != 0 && time.length != 0) {
+//
+//                GlobalScope.launch(Dispatchers.Main) {
+//                    val id = withContext(Dispatchers.IO) {
+//                        return@withContext db.todoDao().add_task(
+//                                entity(
+//                                        title,
+//                                        description,
+//                                        date,
+//                                        time
+//                                )
+//                        )
+//                    }
+//                    finish()
+//                }
+//            }
+//            else {
+//                Toast.makeText(this,"Fields Can't be empty", Toast.LENGTH_LONG).show()
+//            }
+//        }
         update_button.setOnClickListener {
             val title = edit_title.text.toString()
             val description = edit_desc.text.toString()
             val date = edit_date.text.toString()
             val time = edit_time.text.toString()
-            if (title.length != 0 && description.length != 0 && date.length != 0 && time.length != 0) {
 
-                GlobalScope.launch(Dispatchers.Main) {
-                    val id = withContext(Dispatchers.IO) {
-                        return@withContext db.todoDao().add_task(
-                                entity(
-                                        title,
-                                        description,
-                                        date,
-                                        time
-                                )
-                        )
+            if (title.isNotEmpty() && description.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()) {
+                val task = hashMapOf(
+                    "title" to title,
+                    "description" to description,
+                    "date" to date,
+                    "time" to time
+                )
+
+                    taskCollection.add(task)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        finish()
                     }
-                    finish()
-                }
-            }
-            else {
-                Toast.makeText(this,"Fields Can't be empty", Toast.LENGTH_LONG).show()
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding document", e)
+                    }
+            } else {
+                Toast.makeText(this, "Fields Can't be empty", Toast.LENGTH_LONG).show()
             }
         }
+
 
 
 

@@ -9,7 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteMemo">
-        <activity android:name=".update_activiity"></activity>
+        <activity
+            android:name=".auth.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".update_activiity" />
         <activity android:name=".task_activity" />
         <activity android:name=".MainActivity">
             <intent-filter>
